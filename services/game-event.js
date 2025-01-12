@@ -9,8 +9,9 @@ const betLogger = createLogger('Bets', 'jsonl');
 
 export const placeBet = async(io, socket, betData) => {
     const betAmount = Number(betData[0]) || null;
-    const selectedMultiplier = Number(betData[1]) || null;
-    if(!betAmount || !selectedMultiplier) return socket.emit('betError', 'Bet Amount and Multiplier Value is missing in request');
+    const betMultiplier = betData[1] ? betData[1].split(',') : null;
+    if(!betAmount || !betMultiplier || betMultiplier.length == 0) return socket.emit('betError', 'Bet Amount and Multiplier Value is missing in request');
+    const selectedMultiplier = betMultiplier.reduce((total, num) => total + Number(num), 0);
     const cachedPlayerDetails = await getCache(`PL:${socket.id}`);
     if(!cachedPlayerDetails) return socket.emit('betError', 'Invalid Player Details');
     const playerDetails = JSON.parse(cachedPlayerDetails);
