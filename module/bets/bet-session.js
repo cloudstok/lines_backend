@@ -1,6 +1,6 @@
 import { appConfig } from "../../utilities/app-config.js";
 import { updateBalanceFromAccount } from "../../utilities/common-function.js";
-import { generateSkewedRandom, getMaxMult, getRandomMultiplier } from "../../utilities/helper-function.js";
+import { emitNumber } from "../../utilities/helper-function.js";
 import { getCache, setCache } from "../../utilities/redis-connection.js";
 import { insertSettlement } from "./bet-db.js";
 
@@ -25,9 +25,9 @@ export const getResult = async (matchId, betAmount, lineRanges, getMultiplierFro
     let isWin = true;
     const result = [];
     for(const multiplier of lineRanges){
-        const RandomMultiplier = generateSkewedRandom();
+        const RandomMultiplier = emitNumber();
         result.push(RandomMultiplier);
-        if(Number(multiplier) >= RandomMultiplier) isWin = false;
+        if(Number(multiplier) > RandomMultiplier) isWin = false;
     }
     let winAmount = 0;
     if (isWin) {
@@ -54,5 +54,5 @@ export const getResult = async (matchId, betAmount, lineRanges, getMultiplierFro
     };
     //Insert Into Settlement
     await insertSettlement(bet_id, getMultiplierFromLineRanges, isWin);
-    return { winningRange: result, winAmount, settedMult: getMultiplierFromLineRanges };
+    return { winningRange: result, winAmount, settedMult: getMultiplierFromLineRanges, isWin };
 }

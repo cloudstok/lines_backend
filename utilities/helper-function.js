@@ -1,42 +1,58 @@
 import { createLogger } from "./logger.js";
 const failedBetLogger = createLogger('failedBets', 'jsonl');
+import { randomInt } from 'crypto';
+
 
 export const logEventAndEmitResponse = (req, res, event, socket) => {
-  let logData = JSON.stringify({ req, res })
-  if (event === 'bet') {
-    failedBetLogger.error(logData)
-  }
-  return socket.emit('betError', res);
+    let logData = JSON.stringify({ req, res })
+    if (event === 'bet') {
+        failedBetLogger.error(logData)
+    }
+    return socket.emit('betError', res);
 }
 
-export const generateSkewedRandom = () => {
-    const skew = Math.random(); // Generates a uniform random number between 0 and 1
-    const biased = Math.pow(skew, 2); // Squaring skews the distribution towards 0
-    return Math.floor(biased * 101); // Scale to 0-100 and round down
+const probabilityTable = [
+    { range: [1, 10], probability: 0.60 },
+    { range: [11, 30], probability: 0.30 },
+    { range: [31, 60], probability: 0.09 },
+    { range: [61, 95], probability: 0.008 },
+    { range: [96, 100], probability: 0.002 },
+];
+
+const cumulativeDistribution = [];
+let cumulative = 0;
+
+for (let entry of probabilityTable) {
+    cumulative += entry.probability;
+    cumulativeDistribution.push({ ...entry, cumulative });
 }
 
-export const getRandomMultiplier = () => {
-    const win_per = (Math.random() * 99.00);
-    let mult = (RTP) / (win_per * 100);
-    if(mult > 1000) mult = 1000;
-    return Number(mult).toFixed(2)
+export const emitNumber = () => {
+    const rand = Math.random();
+    for (let entry of cumulativeDistribution) {
+        if (rand < entry.cumulative) {
+            return randomInt(entry.range[0], entry.range[1] + 1);
+        }
+    }
+    return 100;
 }
+
 
 const RTP = 92;
 
 export const getMaxMult = (ranges) => {
     let mult = 1;
-    for(let range of ranges){
+    for (let range of ranges) {
         const singleMult = getMaxMultFromRange(range);
         mult *= singleMult;
     };
-    const finalMult = mult * (RTP/100) ;
+    const finalMult = mult * (RTP / 100);
     return Math.floor(finalMult * 100) / 100;
 }
 
-function getMaxMultFromRange(num){
+function getMaxMultFromRange(num) {
     const range = 100;
     const prob = (range - num) / range;
-    const mult = 1/prob;
+    const mult = 1 / prob;
     return mult;
 }
