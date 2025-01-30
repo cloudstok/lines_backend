@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `settlement`(
 
 ALTER TABLE `lines_game`.`settlement` 
   ADD INDEX `inx_bet_id` (`bet_id` ASC) VISIBLE, 
-  ADD INDEX `inx_lobby_id` (`lobby_id` ASC) VISIBLE, 
+  ADD INDEX `inx_match_id` (`match_id` ASC) VISIBLE, 
   ADD INDEX `inx_user_id` (`user_id` ASC) INVISIBLE, 
   ADD INDEX `inx_operator_id` (`operator_id` ASC) INVISIBLE, 
   ADD INDEX `inx_bet_amount` (`bet_amount` ASC) INVISIBLE, 
