@@ -12,11 +12,11 @@ export const logEventAndEmitResponse = (req, res, event, socket) => {
 }
 
 const probabilityTable = [
-    { range: [1, 10], probability: 0.60 },
+    { range: [1, 10], probability: 0.40 },
     { range: [11, 30], probability: 0.30 },
-    { range: [31, 60], probability: 0.09 },
-    { range: [61, 95], probability: 0.008 },
-    { range: [96, 100], probability: 0.002 },
+    { range: [31, 60], probability: 0.20 },
+    { range: [61, 95], probability: 0.08 },
+    { range: [96, 100], probability: 0.02 },
 ];
 
 const cumulativeDistribution = [];
