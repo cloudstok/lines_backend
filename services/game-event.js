@@ -26,7 +26,6 @@ export const placeBet = async (io, socket, betData) => {
 };
 
 export const disconnect = async (socket) => {
-    logger.info('Server Disconnected : Deleted the cache of user');
     const player = await getCache(`PL:${socket.id}`);
     if (!player) {
         socket.emit('betError', 'Invalid Player Details');
