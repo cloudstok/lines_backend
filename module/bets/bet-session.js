@@ -53,6 +53,6 @@ export const getResult = async (matchId, betAmount, lineRanges, getMultiplierFro
         }, 500);
     };
     //Insert Into Settlement
-    await insertSettlement(bet_id, getMultiplierFromLineRanges, isWin);
+    await insertSettlement(bet_id, getMultiplierFromLineRanges, isWin, result);
     return { winningRange: result, winAmount, settedMult: getMultiplierFromLineRanges, isWin };
 }

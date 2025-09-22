@@ -1,4 +1,4 @@
-import { placeBet, disconnect} from '../services/game-event.js';
+import { placeBet, disconnect } from '../services/game-event.js';
 
 export const registerEvents = async (io, socket) => {
     socket.on('message', (data) => {
@@ -7,5 +7,5 @@ export const registerEvents = async (io, socket) => {
             case 'PB': return placeBet(io, socket, event.slice(1, event.length));
         }
     })
-    socket.on('disconnect', ()=> disconnect(socket));
+    socket.on('disconnect', () => disconnect(socket));
 }
