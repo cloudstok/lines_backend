@@ -28,13 +28,14 @@ for (let entry of probabilityTable) {
 }
 
 export const emitNumber = () => {
-    const rand = Math.random();
-    for (let entry of cumulativeDistribution) {
-        if (rand < entry.cumulative) {
-            return randomInt(entry.range[0], entry.range[1] + 1);
-        }
-    }
-    return 100;
+    // const rand = Math.random();
+    // for (let entry of cumulativeDistribution) {
+    //     if (rand < entry.cumulative) {
+    //         return randomInt(entry.range[0], entry.range[1] + 1);
+    //     }
+    // }
+    // return 100;
+    return Math.floor(Math.random() * 99) + 1;
 }
 
 
